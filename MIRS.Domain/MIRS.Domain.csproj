@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\MIRS.Core\MIRS.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Enums\" />
+      <Folder Include="Exceptions\" />
+      <Folder Include="Interfaces\" />
+      <Folder Include="Models\" />
+      <Folder Include="Services\" />
+      <Folder Include="Specifications\" />
+    </ItemGroup>
+
+</Project>
