@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MIRS.Application.DIRegistration;
 using MIRS.Domain.DIRegistration;
-using MIRS.Persistence.ApplicationContext;
+using MIRS.Persistence.ApplicationDbContext;
+using MIRS.Persistence.ApplicationDbContext;
 using MIRS.Persistence.DIRegistration;
 using ServiceDescriptor = MIRS.Core.DI.ServiceDescriptor;
 using ServiceLifetime = MIRS.Core.DI.ServiceLifetime;

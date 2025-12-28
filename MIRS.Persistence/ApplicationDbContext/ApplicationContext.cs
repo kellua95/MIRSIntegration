@@ -1,12 +1,14 @@
 ﻿using System.Reflection;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using MIRS.Domain.Models;
 
-namespace MIRS.Persistence.ApplicationContext;
+namespace MIRS.Persistence.ApplicationDbContext;
 
-public class ApplicationContext:DbContext
+public class ApplicationContext:IdentityDbContext<AppUser,IdentityRole<int>,int>
 {
     public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
     {

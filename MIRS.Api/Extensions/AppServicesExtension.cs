@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using MIRS.Application.DIRegistration;
 using MIRS.Domain.DIRegistration;
 using MIRS.Persistence.DIRegistration;
 using MIRS.Core.DI;
-using MIRS.Persistence.ApplicationContext;
+using MIRS.Domain.Models;
+using MIRS.Persistence.ApplicationDbContext;
 using ServiceDescriptor = MIRS.Core.DI.ServiceDescriptor;
 using ServiceLifetime = MIRS.Core.DI.ServiceLifetime;
 
@@ -22,6 +24,7 @@ public static  class AppServicesExtension
             options.UseSqlite($"Data Source={dbPath}")
         );
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+        services.AddIdentityCore<AppUser>().AddRoles<IdentityRole>().AddEntityFrameworkStores<ApplicationContext>();
         services
             .AddFromRegistry(DomainServiceRegistry.GetServices())
             .AddFromRegistry(ApplicationServiceRegistry.GetServices())
