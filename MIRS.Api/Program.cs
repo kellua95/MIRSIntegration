@@ -22,7 +22,7 @@ public class Program
 
         app.UseHttpsRedirection();
 
-        app.UseRouting();
+        app.UseCors("CorsPolicy");
         
         app.UseAuthorization();
 

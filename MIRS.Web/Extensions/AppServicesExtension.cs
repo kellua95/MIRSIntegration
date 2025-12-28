@@ -1,5 +1,7 @@
-﻿using MIRS.Application.DIRegistration;
+﻿using Microsoft.EntityFrameworkCore;
+using MIRS.Application.DIRegistration;
 using MIRS.Domain.DIRegistration;
+using MIRS.Persistence.ApplicationContext;
 using MIRS.Persistence.DIRegistration;
 using ServiceDescriptor = MIRS.Core.DI.ServiceDescriptor;
 using ServiceLifetime = MIRS.Core.DI.ServiceLifetime;
@@ -7,14 +9,25 @@ namespace MIRS.Web.Extensions;
 
 public static  class AppServicesExtension
 {
-    public static IServiceCollection AddAppServices(this IServiceCollection services)
+    public static IServiceCollection AddAppServices(this IServiceCollection services,IConfiguration config)
     {
-        // services
-        //     .AddFromRegistry(DomainServiceRegistry.GetServices())
-        //     .AddFromRegistry(ApplicationServiceRegistry.GetServices())
-        //     .AddFromRegistry(PersistenceServiceRegistry.GetServices());
-
-        //services.RegisterAppServicesAndRepos();
+        services.AddDbContext<ApplicationContext>(options =>
+        {
+            var connectionString = config.GetConnectionString("DefaultConnection"); 
+            options.UseSqlite(connectionString);
+        });
+        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+        
+        services.AddCors(opt =>
+        {
+            opt.AddPolicy(
+                "CorsPolicy",
+                policy=>policy
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowAnyOrigin()
+            );
+        });
         
         return services;
     }
