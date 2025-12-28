@@ -1,4 +1,6 @@
 ﻿using MIRS.Core.DI;
+using MIRS.Domain.Interfaces.Repositories;
+using MIRS.Persistence.Repositories;
 
 namespace MIRS.Persistence.DIRegistration;
 
@@ -12,6 +14,12 @@ public static class PersistenceServiceRegistry
              typeof(Service),
              typeof(Implementation),
              ServiceLifetime))*/
+        
+        _services.Add(
+            new ServiceDescriptor(
+                typeof(ITestRepo),
+                typeof(TestRepo),
+                ServiceLifetime.Scoped));
 
         return _services.AsReadOnly();
     }

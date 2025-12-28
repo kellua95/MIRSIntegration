@@ -1,4 +1,4 @@
-@MIRS.Api_HostAddress = http://localhost:5031
+@MIRS.Api_HostAddress = http://localhost:5001
 
 GET {{MIRS.Api_HostAddress}}/weatherforecast/
 Accept: application/json

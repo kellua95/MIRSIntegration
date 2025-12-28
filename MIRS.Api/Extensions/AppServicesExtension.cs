@@ -11,15 +11,21 @@ namespace MIRS.Api.Extensions;
 
 public static  class AppServicesExtension
 {
-    public static IServiceCollection AddAppServices(this IServiceCollection services,IConfiguration config)
+    public static IServiceCollection AddAppServices(this IServiceCollection services,IConfiguration config,WebApplicationBuilder builder)
     {
+        var dbPath = Path.Combine(
+            builder.Environment.ContentRootPath,
+            "mirs.db"
+        );
+
         services.AddDbContext<ApplicationContext>(options =>
-        {
-            var connectionString = config.GetConnectionString("DefaultConnection"); 
-            options.UseSqlite(connectionString);
-        });
+            options.UseSqlite($"Data Source={dbPath}")
+        );
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-        
+        services
+            .AddFromRegistry(DomainServiceRegistry.GetServices())
+            .AddFromRegistry(ApplicationServiceRegistry.GetServices())
+            .AddFromRegistry(PersistenceServiceRegistry.GetServices());
         services.AddCors(opt =>
         {
             opt.AddPolicy(
@@ -30,22 +36,6 @@ public static  class AppServicesExtension
                     .AllowAnyOrigin()
             );
         });
-        return services;
-    }
-
-    public static IServiceCollection RegisterAppServicesAndRepos(this IServiceCollection services)
-    {
-        var servicesBucket = new Dictionary<Type, Type>();
-        
-        PersistenceServices.Register(servicesBucket);
-        DomainServices.Register(servicesBucket);
-        ApplicationServices.Register(servicesBucket);
-        
-        foreach (var entry in servicesBucket)
-        {
-            services.AddScoped(entry.Key, entry.Value);
-        }
-        
         return services;
     }
     

@@ -1,5 +1,8 @@
 ﻿using System.Reflection;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
+using MIRS.Domain.Models;
 
 namespace MIRS.Persistence.ApplicationContext;
 
@@ -9,6 +12,8 @@ public class ApplicationContext:DbContext
     {
         
     }
+    
+    public DbSet<Test> Tests { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -25,5 +30,22 @@ public class ApplicationContext:DbContext
                 }
             }
         }
+    }
+}
+
+public class ApplicationContextFactory
+    : IDesignTimeDbContextFactory<ApplicationContext>
+{
+    public ApplicationContext CreateDbContext(string[] args)
+    {
+        var basePath = Directory.GetCurrentDirectory(); 
+        // This will now be MIRS.Api when using --startup-project
+
+        var dbPath = Path.Combine(basePath, "mirs.db");
+
+        var optionsBuilder = new DbContextOptionsBuilder<ApplicationContext>();
+        optionsBuilder.UseSqlite($"Data Source={dbPath}");
+
+        return new ApplicationContext(optionsBuilder.Options);
     }
 }
