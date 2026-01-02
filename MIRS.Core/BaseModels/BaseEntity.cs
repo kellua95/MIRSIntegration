@@ -1,6 +1,8 @@
-﻿namespace MIRS.Core.BaseModels;
+﻿using MIRS.Core.Intefaces;
 
-public abstract class BaseEntity
+namespace MIRS.Core.BaseModels;
+
+public abstract class BaseEntity:IBaseEntity
 {
     public int Id { get; set; }
 }
