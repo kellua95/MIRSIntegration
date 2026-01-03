@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MIRS.Api.Errors;
 using MIRS.Application.DIRegistration;
 using MIRS.Domain.DIRegistration;
 using MIRS.Persistence.DIRegistration;
@@ -29,6 +31,23 @@ public static  class AppServicesExtension
             .AddFromRegistry(DomainServiceRegistry.GetServices())
             .AddFromRegistry(ApplicationServiceRegistry.GetServices())
             .AddFromRegistry(PersistenceServiceRegistry.GetServices());
+        
+        services.Configure<ApiBehaviorOptions>(options =>
+        {
+            options.InvalidModelStateResponseFactory = context =>
+            {
+                var errors = context.ModelState
+                    .Where(x => x.Value.Errors.Any())
+                    .SelectMany(x => x.Value.Errors)
+                    .Select(x => x.ErrorMessage)
+                    .ToList();
+
+                var response = new ApiValidationErrorResponse(errors);
+
+                return new BadRequestObjectResult(response);
+            };
+        });
+        
         services.AddCors(opt =>
         {
             opt.AddPolicy(

@@ -1,4 +1,5 @@
 using MIRS.Api.Extensions;
+using MIRS.Api.Middleware;
 
 namespace MIRS.Api;
 
@@ -17,7 +18,10 @@ public class Program
 
         
         var app = builder.Build();
-
+        
+        app.UseMiddleware<ExceptionMiddleware>();
+        
+        app.UseStatusCodePagesWithReExecute("/errors/{0}");
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
@@ -25,7 +29,7 @@ public class Program
         }
 
         app.UseHttpsRedirection();
-
+        app.UseStaticFiles();
         app.UseCors("CorsPolicy");
         
         app.UseAuthorization();
