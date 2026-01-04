@@ -2,7 +2,13 @@
 
 namespace MIRS.Domain.Interfaces.DomainServices;
 
-public interface ITestManager
+public interface ITestManager<TEntity>
+
 {
-    public Test AddTest(int id);
+    Task<IReadOnlyList<TEntity>> GetAllTestsAsync();
+    Task<TEntity?> GetTestByIdAsync(int id);
+
+    Task<TEntity?> CreateAsync(TEntity entity);
+    Task<TEntity?> UpdateAsync(TEntity entity);
+    Task<bool> DeleteAsync(int id);
 }

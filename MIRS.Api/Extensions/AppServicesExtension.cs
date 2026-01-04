@@ -24,7 +24,7 @@ public static  class AppServicesExtension
             options.UseSqlite($"Data Source={dbPath}")
         );
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-        services.AddIdentityCore<AppUser>().AddRoles<IdentityRole>().AddEntityFrameworkStores<ApplicationContext>();
+        services.AddIdentityCore<AppUser>().AddRoles<IdentityRole<int>>().AddEntityFrameworkStores<ApplicationContext>();
         services
             .AddFromRegistry(DomainServiceRegistry.GetServices())
             .AddFromRegistry(ApplicationServiceRegistry.GetServices())

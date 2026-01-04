@@ -20,6 +20,13 @@ public static class PersistenceServiceRegistry
                 typeof(ITestRepo),
                 typeof(TestRepo),
                 ServiceLifetime.Scoped));
+        
+                
+        _services.Add(
+            new ServiceDescriptor(
+                typeof(IGenericRepository<>),
+                typeof(GenericRepository<>),
+                ServiceLifetime.Scoped));
 
         return _services.AsReadOnly();
     }

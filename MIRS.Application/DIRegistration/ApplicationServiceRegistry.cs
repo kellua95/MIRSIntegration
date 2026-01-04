@@ -1,5 +1,4 @@
-﻿using MIRS.Application.Interfaces;
-using MIRS.Application.Services;
+﻿
 using MIRS.Core.DI;
 
 namespace MIRS.Application.DIRegistration;
@@ -14,7 +13,6 @@ public static class ApplicationServiceRegistry
              typeof(Service),
              typeof(Implementation),
              ServiceLifetime))*/
-        _services.Add(new ServiceDescriptor(typeof(ITestAppService), typeof(TestAppService), ServiceLifetime.Scoped));
 
         return _services.AsReadOnly();
     }
