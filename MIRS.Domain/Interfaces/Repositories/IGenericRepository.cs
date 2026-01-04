@@ -5,7 +5,7 @@ using MIRS.Domain.Models;
 
 namespace MIRS.Domain.Interfaces.Repositories;
 
-public interface IGenericRepository<TEntity>
+public interface IGenericRepository<TEntity> where TEntity : BaseEntity
 {
     Task<TEntity?> GetEntityBySpecAsync(ISpecification<TEntity> spec);
 
