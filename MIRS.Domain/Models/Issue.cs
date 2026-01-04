@@ -11,20 +11,20 @@ namespace MIRS.Domain.Models
     public class Issue : BaseEntity
     {
         public int IssueTypeId { get; set; }
-        public IssueTypeEnum Type { get; set; }
+        public IssueType issueType { get; set; }
         public int GovernorateId { get; set; }
         public int MunicipalityId { get; set; }
         public string ? Street { get; set; }
         public string ? AddressDetails { get; set; }
         public string ? Description { get; set; }
         public IssueStatusEnum Status { get; set; }
-        public int CreatedByUserId { get; set; }
+        public int UserId { get; set; }
         public int? AssignedEmployeeId { get; set; }
         public ICollection<IssueImage> ? Images { get; set; }
         public ICollection<IssueComment> ? Comments { get; set; }
         public Governorate Governorate { get; set; }
         public Municipality Municipality { get; set; }
-        public AppUser CreatedByUser { get; set; }
+        public AppUser User { get; set; }
         public AppUser AssignedEmployee { get; set; }
 
     }

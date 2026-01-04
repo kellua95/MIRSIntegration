@@ -1,20 +1,21 @@
-﻿namespace MIRS.Core.BaseModels;
+﻿using MIRS.Core.Intefaces;
 
-public abstract class BaseEntity
+namespace MIRS.Core.BaseModels;
+
+public abstract class BaseEntity:IBaseEntity , IAuditedEntity 
 {
     public int Id { get; set; }
 
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime? CreatedAt { get; set; } = DateTime.Now;
 
     public DateTime? UpdatedAt { get; set; }
 }
-
-public abstract class  BaseEntity<TKey>
+public abstract class BaseEntity<TKey>:IBaseEntity<TKey>  , IAuditedEntity
 {
 
-    public int Id { get; set; }
+    public TKey Id { get; set; }
 
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime ? CreatedAt { get; set; } = DateTime.Now;
 
     public DateTime? UpdatedAt { get; set; }
 

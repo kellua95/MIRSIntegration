@@ -11,7 +11,8 @@ namespace MIRS.Domain.Enums
         Pending = 1,
         InProgress = 2,
         Resolved = 3,
-        Reopened = 4
+        Reopened = 4,
+        Rejected = 5
 
     }
 }
