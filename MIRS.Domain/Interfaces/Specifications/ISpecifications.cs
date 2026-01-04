@@ -3,7 +3,7 @@ using MIRS.Core.BaseModels;
 
 namespace MIRS.Domain.Interfaces.ISpecifications;
 
-public interface ISpecification<TEntity>
+public interface ISpecification<TEntity>  where TEntity : class
 {
     Expression<Func<TEntity, bool>>? Criteria { get; }
     Expression<Func<TEntity, object>>? OrderBy { get; }

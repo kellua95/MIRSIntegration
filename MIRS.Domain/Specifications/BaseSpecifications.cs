@@ -3,7 +3,7 @@ using MIRS.Domain.Interfaces.ISpecifications;
 
 namespace MIRS.Domain.Specifications;
 
-public abstract class BaseSpecification<TEntity> : ISpecification<TEntity>
+public abstract class BaseSpecification<TEntity> : ISpecification<TEntity>  where TEntity : class
 {
     public Expression<Func<TEntity, bool>>? Criteria { get; protected set; }
     public Expression<Func<TEntity, object>>? OrderBy { get; protected set; }
