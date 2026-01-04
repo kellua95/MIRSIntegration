@@ -6,6 +6,7 @@ namespace MIRS.Domain.Specifications;
 public abstract class BaseSpecification<TEntity> : ISpecification<TEntity>
 {
     public Expression<Func<TEntity, bool>>? Criteria { get; protected set; }
+    public Expression<Func<TEntity, object>>? OrderBy { get; protected set; }
     public Expression<Func<TEntity, object>>? OrderByDesc { get; protected set; }
 
     private readonly List<Expression<Func<TEntity, object>>> _includes = new();
@@ -31,6 +32,11 @@ public abstract class BaseSpecification<TEntity> : ISpecification<TEntity>
     protected void ApplyOrderByDesc(Expression<Func<TEntity, object>> orderByDesc)
     {
         OrderByDesc = orderByDesc;
+    }
+    
+    protected void ApplyOrder(Expression<Func<TEntity, object>> orderBy)
+    {
+        OrderBy = orderBy;
     }
 
     protected void ApplyPaging(int skip, int take)

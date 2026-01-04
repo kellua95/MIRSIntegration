@@ -17,8 +17,13 @@ public static class SpecificationEvaluator<TEntity>
 
         if (spec.OrderByDesc != null)
         {
-            query = query.OrderByDescending(spec.OrderByDesc);
+            query = query.OrderByDescending(spec.OrderBy);
         }
+        else
+        {
+            query = query.OrderBy(spec.OrderBy);
+        }
+        
 
         if (spec.IsPagingEnabled)
         {

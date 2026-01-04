@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MIRS.Core.BaseModels;
 using MIRS.Domain.Interfaces.ISpecifications;
 using MIRS.Domain.Interfaces.Repositories;
 using MIRS.Persistence.ApplicationDbContext;
@@ -7,7 +8,7 @@ using MIRS.Persistence.Specifications;
 namespace MIRS.Persistence.Repositories;
 
 public class GenericRepository<TEntity> : IGenericRepository<TEntity>
-    where TEntity : class
+    where TEntity : BaseEntity
 {
     protected readonly ApplicationContext Context;
 
