@@ -1,98 +1,55 @@
-﻿using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
-using MIRS.Core.BaseModels;
+﻿using Microsoft.EntityFrameworkCore;
 using MIRS.Domain.Interfaces.ISpecifications;
 using MIRS.Domain.Interfaces.Repositories;
 using MIRS.Persistence.ApplicationDbContext;
+using MIRS.Persistence.Specifications;
 
 namespace MIRS.Persistence.Repositories;
 
-public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
+public class GenericRepository<TEntity> : IGenericRepository<TEntity>
+    where TEntity : class
 {
-    private readonly ApplicationContext _context;
+    protected readonly ApplicationContext Context;
 
-    public  GenericRepository(ApplicationContext context)
+    public GenericRepository(ApplicationContext context)
     {
-        _context = context;
-    }
-    
-    public virtual async Task<List<TEntity>> GetByCondition(Expression<Func<TEntity, bool>> Predicate)
-    {
-        try
-        {
-            List<TEntity>? data = await _context.Set<TEntity>().Where(Predicate).ToListAsync();
-            return  data.ToList();
-
-        }
-        catch (Exception ex)
-        {
-            return  null;
-        }
+        Context = context;
     }
 
-
-    public async Task<IReadOnlyList<TEntity>> GetAllAsync()
+    public async Task<TEntity?> GetEntityBySpecAsync(ISpecification<TEntity> spec)
     {
-        try
-        {
-            var result = await _context.Set<TEntity>().ToListAsync();
-            return result;
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
-  
+        return await ApplySpecification(spec).FirstOrDefaultAsync();
     }
 
-    public async Task<TEntity> CreateAsync(TEntity entity)
+    public async Task<IReadOnlyList<TEntity>> GetListBySpecAsync(
+        ISpecification<TEntity> spec)
     {
-        try
-        {
-            dynamic? data = null;
-            if (entity != null)
-            {
-                await _context.Set<TEntity>().AddAsync(entity);
-                if (await _context.SaveChangesAsync() > 0)
-                    data = new List<TEntity> { entity };
-            }
-            return data;
-        }
-        catch(Exception exception)
-        {
-            return null;
-        }
+        return await ApplySpecification(spec).ToListAsync();
     }
 
-    public async Task<TEntity?> UpdateAsync(TEntity entity)
+    public async Task<int> CountAsync(ISpecification<TEntity> spec)
     {
-        try
-        {
-            if (entity == null)
-                return null;
-
-            _context.Set<TEntity>().Update(entity);
-
-            var affected = await _context.SaveChangesAsync();
-            return affected > 0 ? entity : null;
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
-     
+        return await ApplySpecification(spec).CountAsync();
     }
 
-    public async Task<bool> DeleteByIdAsync(int id)
+    public async Task AddAsync(TEntity entity)
     {
-        var entity = await _context.Set<TEntity>().FindAsync(id);
-        if (entity == null) return false;
-
-        _context.Set<TEntity>().Remove(entity);
-        return await _context.SaveChangesAsync() > 0;
+        await Context.Set<TEntity>().AddAsync(entity);
     }
-    
 
+    public void Update(TEntity entity)
+    {
+        Context.Set<TEntity>().Update(entity);
+    }
+
+    public void Delete(TEntity entity)
+    {
+        Context.Set<TEntity>().Remove(entity);
+    }
+
+    private IQueryable<TEntity> ApplySpecification( ISpecification<TEntity> spec)
+    {
+        return SpecificationEvaluator<TEntity>
+            .GetQuery(Context.Set<TEntity>().AsQueryable(), spec);
+    }
 }

@@ -1,48 +1,42 @@
 ﻿using System.Linq.Expressions;
-using MIRS.Core.BaseModels;
 using MIRS.Domain.Interfaces.ISpecifications;
 
 namespace MIRS.Domain.Specifications;
 
-public abstract class BaseSpecifications<TEntity>: ISpecifications<TEntity> where TEntity : BaseEntity
+public abstract class BaseSpecification<TEntity> : ISpecification<TEntity>
 {
-  public Expression<Func<TEntity, object>> OrderBy { get; private  set; }
-  public Expression<Func<TEntity, object>> OrderByDesc { get; private set; }
-  public Expression<Func<TEntity, bool>> Where { get; private set; }
-  public List<Expression<Func<TEntity, object>>> Includes { get; } = new List<Expression<Func<TEntity, object>>>();
-  public int Take { get; private set; }
-  public int Skip { get; private set;}
-  public bool IsPaginated { get; private set;}
+    public Expression<Func<TEntity, bool>>? Criteria { get; protected set; }
+    public Expression<Func<TEntity, object>>? OrderByDesc { get; protected set; }
 
-  protected BaseSpecifications() {}
-  
-  protected BaseSpecifications(Expression<Func<TEntity, bool>> where)
-  {
-    Where = where;
-  }
+    private readonly List<Expression<Func<TEntity, object>>> _includes = new();
+    public IReadOnlyList<Expression<Func<TEntity, object>>> Includes => _includes;
 
-  protected void AddInclude(Expression<Func<TEntity, object>> include)
-  {
-    Includes.Add(include);
-  }
-  
-  /*protected void AddOrderBy(Expression<Func<TEntity, object>> orderBy)
-  {
-    OrderBy = orderBy;
-  }*/
+ 
+    public int Skip { get; protected set; }
+    public int Take { get; protected set; }
+    public bool IsPagingEnabled { get; protected set; }
 
-  protected void AddOrderByDesc(Expression<Func<TEntity, object>> orderBy)
-  {
-    OrderByDesc = orderBy;
-  }
+    protected BaseSpecification() { }
 
-  protected void AddPaginated(int skip, int take, bool isPaginated)
-  {
-    Skip = skip;
-    Take = take;
-    IsPaginated  = true;
+    protected BaseSpecification(Expression<Func<TEntity, bool>> criteria)
+    {
+        Criteria = criteria;
+    }
 
-  }
+    protected void AddInclude(Expression<Func<TEntity, object>> include)
+    {
+        _includes.Add(include);
+    }
 
+    protected void ApplyOrderByDesc(Expression<Func<TEntity, object>> orderByDesc)
+    {
+        OrderByDesc = orderByDesc;
+    }
 
+    protected void ApplyPaging(int skip, int take)
+    {
+        Skip = skip;
+        Take = take;
+        IsPagingEnabled = true;
+    }
 }

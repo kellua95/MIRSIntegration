@@ -17,107 +17,81 @@ public abstract class TestController<TEntity> : ControllerBase
     }
 
     #region Get
+
     [HttpGet]
-    public async Task<ActionResult<List<TEntity>>> GetAll()
+    public async Task<ActionResult<IReadOnlyList<TEntity>>> GetAll()
     {
-        try
-        {
-            var result = await _testManager.GetAllTestsAsync();
-            return Ok(result);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+        var result = await _testManager.GetAllTestsAsync();
+        return Ok(result);
     }
-    
-    [HttpGet("{id}")]
+
+    [HttpGet("{id:int}")]
     public async Task<ActionResult<TEntity>> GetById(int id)
     {
-        try
-        {
-            var result = await _testManager.GetTestsByIdAsync(id);
+        if (id <= 0)
+            return BadRequest("Invalid ID");
 
-            if (result == null)
-                return NotFound();
+        var entity = await _testManager.GetTestByIdAsync(id);
 
-            return Ok(result);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+        if (entity == null)
+            return NotFound();
 
+        return Ok(entity);
     }
+
     #endregion
 
-    #region  Create
-    [HttpPost("create")]
+    #region Create
+
+    [HttpPost]
     public async Task<ActionResult<TEntity>> Create([FromBody] TEntity entity)
     {
-        try
-        {
-            var result = await _testManager.CreateAsync(entity);
+        if (entity == null)
+            return BadRequest("Entity cannot be null");
 
-            if (result == null)
-                return BadRequest("Create failed");
+        var created = await _testManager.CreateAsync(entity);
 
-            return Ok(result);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
-      
+        if (created == null)
+            return BadRequest("Create operation failed");
 
+        return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
+
     #endregion
 
     #region Update
-    [HttpPut("update")]
-    public async Task<ActionResult<TEntity>> Update([FromBody] TEntity entity)
+
+    [HttpPut("{id:int}")]
+    public async Task<ActionResult<TEntity>> Update(int id, [FromBody] TEntity entity)
     {
-        try
-        {
-            var created = await _testManager.UpdateAsync(entity);
+        if (entity == null || entity.Id != id)
+            return BadRequest("Invalid entity or ID mismatch");
 
-            if (created == null)
-                return NotFound();
+        var updated = await _testManager.UpdateAsync(entity);
 
-            return Ok(created);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+        if (updated == null)
+            return NotFound();
 
+        return Ok(updated);
     }
+
     #endregion
 
     #region Delete
-    [HttpDelete("{id}")]
+
+    [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {
-        try
-        {
-            var result = await _testManager.DeleteAsync(id);
+        if (id <= 0)
+            return BadRequest("Invalid ID");
 
-            if (!result)
-                return NotFound();
+        var deleted = await _testManager.DeleteAsync(id);
 
-            return Ok(result);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
-  
+        if (!deleted)
+            return NotFound();
+
+        return NoContent();
     }
-    #endregion
 
+    #endregion
 }

@@ -5,12 +5,16 @@ using MIRS.Domain.Models;
 
 namespace MIRS.Domain.Interfaces.Repositories;
 
-public interface IGenericRepository<TEntity>  where TEntity : class
+public interface IGenericRepository<TEntity>
 {
-    Task<List<TEntity>> GetByCondition(Expression<Func<TEntity, bool>> Predicate);
-    Task<IReadOnlyList<TEntity>> GetAllAsync();
-    Task<TEntity> CreateAsync(TEntity entity);
-    Task<TEntity?> UpdateAsync(TEntity entity);
-    Task<bool> DeleteByIdAsync(int id);
+    Task<TEntity?> GetEntityBySpecAsync(ISpecification<TEntity> spec);
+
+    Task<IReadOnlyList<TEntity>> GetListBySpecAsync(
+        ISpecification<TEntity> spec);
+
+    Task<int> CountAsync(ISpecification<TEntity> spec);
+    Task AddAsync(TEntity entity);
+    void Update(TEntity entity);
+    void Delete(TEntity entity);
 
 }

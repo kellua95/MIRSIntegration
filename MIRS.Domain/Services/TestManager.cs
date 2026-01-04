@@ -1,105 +1,99 @@
-﻿using MIRS.Core.BaseModels;
-using MIRS.Domain.Interfaces.DomainServices;
+﻿using MIRS.Domain.Interfaces.DomainServices;
 using MIRS.Domain.Interfaces.Repositories;
 using MIRS.Domain.Models;
+using MIRS.Domain.Specifications;
 
 namespace MIRS.Domain.Services;
 
-public class TestManager<TEntity>:ITestManager<TEntity> where TEntity : Test
+public class TestManager<TEntity> : ITestManager<TEntity>
+    where TEntity : Test
 {
-   private readonly IGenericRepository<TEntity>  _genericRepository;
+    private readonly IGenericRepository<TEntity> _repository;
 
-    public TestManager(IGenericRepository<TEntity>  genericRepository )
+    public TestManager(IGenericRepository<TEntity> repository)
     {
-        _genericRepository = genericRepository;
+        _repository = repository;
     }
-    
-    #region  Read
 
-    public async Task<List<TEntity>> GetAllTestsAsync()
-    {
-        try
-        {
-            var result = await _genericRepository.GetAllAsync();
-            return result.ToList();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+    #region Read
 
-    }
-    public async Task<TEntity> GetTestsByIdAsync(int id)
+    public async Task<IReadOnlyList<TEntity>> GetAllTestsAsync()
     {
-        try
-        {
-            var result = await _genericRepository.GetByCondition(x  => x.Id == id);
-            return result.ToList().FirstOrDefault();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+        var spec = new AllTestsSpecification<TEntity>();
+        return await _repository.GetListBySpecAsync(spec);
     }
-    
+
+    public async Task<TEntity?> GetTestByIdAsync(int id)
+    {
+        if (id <= 0)
+            return null;
+
+        var spec = new TestByIdSpecification<TEntity>(id);
+        return await _repository.GetEntityBySpecAsync(spec);
+    }
+
     #endregion
 
     #region Create
+
     public async Task<TEntity?> CreateAsync(TEntity entity)
     {
-        try
-        {
-            if (entity == null)
-                return null;
+        if (entity == null)
+            return null;
 
-            var created = await _genericRepository.CreateAsync(entity);
-            return created;
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+        await _repository.AddAsync(entity);
+        return entity;
     }
+
     #endregion
 
     #region Update
+
     public async Task<TEntity?> UpdateAsync(TEntity entity)
     {
-        try
-        {
-            if (entity == null || entity.Id <= 0)
-                return null;
+        if (entity == null || entity.Id <= 0)
+            return null;
 
-            var updated = await _genericRepository.UpdateAsync(entity);
-            return updated;
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+        _repository.Update(entity);
+        return entity;
     }
+
     #endregion
-  
+
     #region Delete
+
     public async Task<bool> DeleteAsync(int id)
     {
-        try
-        {
-            if (id <= 0)
-                return false;
+        if (id <= 0)
+            return false;
 
-            await _genericRepository.DeleteByIdAsync(id);
-            return true;
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+        var spec = new TestByIdSpecification<TEntity>(id);
+        var entity = await _repository.GetEntityBySpecAsync(spec);
+
+        if (entity == null)
+            return false;
+
+        _repository.Delete(entity);
+        return true;
     }
+
     #endregion
+}
+
+
+public sealed class TestByIdSpecification<TEntity> : BaseSpecification<TEntity>
+    where TEntity : Test
+{
+    public TestByIdSpecification(int id)
+        : base(t => t.Id == id)
+    {
+    }
+}
+
+public sealed class AllTestsSpecification<TEntity> : BaseSpecification<TEntity>
+    where TEntity : Test
+{
+    public AllTestsSpecification()
+    {
+    }
 }

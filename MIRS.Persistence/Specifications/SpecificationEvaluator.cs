@@ -1,38 +1,34 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MIRS.Core.BaseModels;
 using MIRS.Domain.Interfaces.ISpecifications;
 
 namespace MIRS.Persistence.Specifications;
 
-public class SpecificationEvaluator<TEntity> where TEntity: BaseEntity
+public static class SpecificationEvaluator<TEntity>
+    where TEntity : class
 {
-    public static IQueryable<TEntity> GetQuery(IQueryable<TEntity> query, ISpecifications<TEntity> spec)
+    public static IQueryable<TEntity> GetQuery( IQueryable<TEntity> inputQuery, ISpecification<TEntity> spec)
     {
-        var Query = query;
-        if (spec.Where != null)
-        {
-            query = query.Where(spec.Where);
-        }
+        IQueryable<TEntity> query = inputQuery;
 
-       /*if (spec.OrderBy != null)
+        if (spec.Criteria != null)
         {
-            Query = querys.OrderBy(spec.OrderBy);
-        }*/
+            query = query.Where(spec.Criteria);
+        }
 
         if (spec.OrderByDesc != null)
         {
-            Query = query.OrderByDescending(spec.OrderByDesc);
+            query = query.OrderByDescending(spec.OrderByDesc);
         }
 
-        if (spec.IsPaginated != null)
+        if (spec.IsPagingEnabled)
         {
-            Query = query.Skip(spec.Skip).Take(spec.Take);
+            query = query.Skip(spec.Skip).Take(spec.Take);
         }
-        
-        if (spec.Includes != null && spec.Includes.Any())
-            Query = spec.Includes.Aggregate(query, (current, include) => current.Include(include));
 
-        return Query;
+        query = spec.Includes.Aggregate(
+            query,
+            (current, include) => current.Include(include));
+
+        return query;
     }
-    
 }
