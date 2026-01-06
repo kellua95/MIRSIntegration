@@ -9,7 +9,7 @@
     <ItemGroup>
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.10" />
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.10"/>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.10" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.10">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -20,6 +20,7 @@
     <ItemGroup>
       <ProjectReference Include="..\MIRS.Application\MIRS.Application.csproj" />
       <ProjectReference Include="..\MIRS.Persistence\MIRS.Persistence.csproj" />
+      <ProjectReference Include="..\MIRS.Startup\MIRS.Startup.csproj" />
     </ItemGroup>
 
 </Project>

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using MIRS.Core.Intefaces;
 using MIRS.Domain.Models;
 
 namespace MIRS.Persistence.ApplicationDbContext
@@ -47,6 +48,25 @@ namespace MIRS.Persistence.ApplicationDbContext
                     }
                 }
             }
+        }
+        
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            var entries = ChangeTracker.Entries<IAuditedEntity>().Where(x=>x.State==EntityState.Modified||x.State==EntityState.Added);
+
+            foreach (var entry in entries)
+            {
+                if (entry.State == EntityState.Added)
+                {
+                    entry.Entity.CreatedAt = DateTime.Now;
+                }
+                else if (entry.State == EntityState.Modified)
+                {
+                    entry.Entity.UpdatedAt = DateTime.Now;
+                }
+            }
+        
+            return base.SaveChangesAsync(cancellationToken);
         }
     }
 }

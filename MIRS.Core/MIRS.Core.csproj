@@ -7,8 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Results\" />
-      <Folder Include="Services\" />
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
     </ItemGroup>
-
 </Project>

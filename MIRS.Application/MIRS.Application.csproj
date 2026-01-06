@@ -7,20 +7,21 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\MIRS.Core\MIRS.Core.csproj" />
-      <ProjectReference Include="..\MIRS.Domain\MIRS.Domain.csproj" />
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+        <ProjectReference Include="..\MIRS.Core\MIRS.Core.csproj" />
+        <ProjectReference Include="..\MIRS.Domain\MIRS.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="DTOs\" />
       <Folder Include="Exceptions\" />
-      <Folder Include="Interfaces\" />
       <Folder Include="Mappings\" />
-      <Folder Include="Services\" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="AutoMapper" Version="12.0.1" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.10" />
+      <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.2.1" />
+      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.2.1" />
     </ItemGroup>
 
 </Project>

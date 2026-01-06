@@ -1,4 +1,8 @@
 ﻿using MIRS.Core.DI;
+using MIRS.Domain.Interfaces;
+using MIRS.Domain.Interfaces.Repositories;
+using MIRS.Persistence.Repositories;
+using MIRS.Persistence.Services;
 
 namespace MIRS.Persistence.DIRegistration;
 
@@ -8,10 +12,25 @@ public static class PersistenceServiceRegistry
 
     public static IReadOnlyList<ServiceDescriptor> GetServices()
     {
-        /*Add(ServiceDescriptor(
-             typeof(Service),
-             typeof(Implementation),
-             ServiceLifetime))*/
+        AddService(new ServiceDescriptor(
+             typeof(IUnitOfWork),
+             typeof(UnitOfWork),
+             ServiceLifetime.Scoped));
+
+        AddService(new ServiceDescriptor(
+             typeof(IGenericRepository<>),
+             typeof(GenericRepository<>),
+             ServiceLifetime.Scoped));
+
+        AddService(new ServiceDescriptor(
+             typeof(IDataSeeder),
+             typeof(IdentityDataSeeder),
+             ServiceLifetime.Scoped));
+
+        AddService(new ServiceDescriptor(
+             typeof(IDataSeeder),
+             typeof(UsersDataSeeder),
+             ServiceLifetime.Scoped));
 
         return _services.AsReadOnly();
     }

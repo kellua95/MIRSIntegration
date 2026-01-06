@@ -1,3 +1,5 @@
+using MIRS.Application.Interfaces;
+using MIRS.Application.Services;
 using MIRS.Core.DI;
 
 namespace MIRS.Application.DIRegistration;
@@ -8,10 +10,25 @@ public static class ApplicationServiceRegistry
 
     public static IReadOnlyList<ServiceDescriptor> GetServices()
     {
-        /*Add(ServiceDescriptor(
-             typeof(Service),
-             typeof(Implementation),
-             ServiceLifetime))*/
+        AddService(new ServiceDescriptor(
+             typeof(IIssueService),
+             typeof(IssueService),
+             ServiceLifetime.Scoped));
+
+        AddService(new ServiceDescriptor(
+             typeof(ITokenService),
+             typeof(TokenService),
+             ServiceLifetime.Scoped));
+
+        AddService(new ServiceDescriptor(
+             typeof(IAuthService),
+             typeof(AuthService),
+             ServiceLifetime.Scoped));
+
+        AddService(new ServiceDescriptor(
+             typeof(IUserService),
+             typeof(UserService),
+             ServiceLifetime.Scoped));
 
         return _services.AsReadOnly();
     }

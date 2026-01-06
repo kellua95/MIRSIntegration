@@ -1,4 +1,6 @@
 using AutoMapper;
+using MIRS.Application.DTOs;
+using MIRS.Domain.Models;
 
 namespace MIRS.Application.Mappings;
 
@@ -6,7 +8,7 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        // Add your mappings here
-        // CreateMap<Source, Destination>();
+        CreateMap<Issue, IssueDto>();
+        CreateMap<CreateIssueDto, Issue>();
     }
 }

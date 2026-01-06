@@ -11,7 +11,7 @@ namespace MIRS.Domain.Models
     public class Issue : BaseEntity
     {
         public int IssueTypeId { get; set; }
-        public IssueType issueType { get; set; }
+        public IssueType IssueType { get; set; }
         public int GovernorateId { get; set; }
         public int MunicipalityId { get; set; }
         public string ? Street { get; set; }

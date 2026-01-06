@@ -10,7 +10,7 @@ public class AppUser:IdentityUser<int>, IAuditedEntity
    
    public bool IsActive { get; set; } 
      
-   public DateTime? CreatedAt { get; set; } = DateTime.Now;
+   public DateTime? CreatedAt { get; set; }
    public DateTime? UpdatedAt { get; set; }
 
 

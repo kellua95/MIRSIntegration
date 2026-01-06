@@ -13,7 +13,7 @@ public class IssueConfiguration : IEntityTypeConfiguration<Issue>
                .HasConversion<string>()
                .IsRequired();
 
-        builder.HasOne(x => x.issueType)
+        builder.HasOne(x => x.IssueType)
                .WithMany()
                .HasForeignKey(x => x.IssueTypeId)
                .OnDelete(DeleteBehavior.Restrict);

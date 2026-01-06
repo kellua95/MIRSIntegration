@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using MIRS.Api.Errors;
 using MIRS.Application.DIRegistration;
 using MIRS.Domain.DIRegistration;
@@ -15,18 +18,35 @@ namespace MIRS.Api.Extensions;
 
 public static  class AppServicesExtension
 {
-    public static IServiceCollection AddAppServices(this IServiceCollection services,IConfiguration config,WebApplicationBuilder builder)
+    public static IServiceCollection AddAppServices(this IServiceCollection services,IConfiguration config)
     {
-        var dbPath = Path.Combine(
-            builder.Environment.ContentRootPath,
-            "mirs.db"
-        );
+        var connectionString = config.GetConnectionString("DefaultConnection") ?? "Data Source=mirs.db";
 
         services.AddDbContext<ApplicationContext>(options =>
-            options.UseSqlite($"Data Source={dbPath}")
+            options.UseSqlite(connectionString)
         );
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-        services.AddIdentityCore<AppUser>().AddRoles<IdentityRole<int>>().AddEntityFrameworkStores<ApplicationContext>();
+        services.AddIdentityCore<AppUser>()
+            .AddRoles<IdentityRole<int>>()
+            .AddEntityFrameworkStores<ApplicationContext>()
+            .AddSignInManager<SignInManager<AppUser>>()
+            .AddDefaultTokenProviders();
+
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Token:Key"] ?? "super_secret_key_that_is_at_least_32_chars_long")),
+                    ValidIssuer = config["Token:Issuer"],
+                    ValidateIssuer = true,
+                    ValidateAudience = false
+                };
+            });
+
+        services.AddAuthorization();
+
         services
             .AddFromRegistry(DomainServiceRegistry.GetServices())
             .AddFromRegistry(ApplicationServiceRegistry.GetServices())

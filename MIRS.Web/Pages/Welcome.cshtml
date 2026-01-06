@@ -1,0 +1,14 @@
+@page
+@model MIRS.Web.Pages.WelcomeModel
+@{
+    ViewData["Title"] = "Welcome";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to MIRS</h1>
+    <p>Please log in or register to access the system.</p>
+    <div class="mt-4">
+        <a asp-page="/Account/Login" class="btn btn-primary btn-lg">Login</a>
+        <a asp-page="/Account/Register" class="btn btn-outline-secondary btn-lg">Register</a>
+    </div>
+</div>

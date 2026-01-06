@@ -1,4 +1,6 @@
 using AutoMapper;
+using MIRS.Application.DTOs;
+using MIRS.Web.ViewModels;
 
 namespace MIRS.Web.Mappings;
 
@@ -6,7 +8,7 @@ public class WebMappingProfile : Profile
 {
     public WebMappingProfile()
     {
-        // Add your mappings here
-        // CreateMap<Source, Destination>();
+        CreateMap<LoginViewModel, LoginDto>();
+        CreateMap<RegisterViewModel, RegisterDto>();
     }
 }

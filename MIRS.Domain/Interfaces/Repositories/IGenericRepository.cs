@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using MIRS.Core.BaseModels;
 using MIRS.Domain.Interfaces.ISpecifications;
 using MIRS.Domain.Models;
