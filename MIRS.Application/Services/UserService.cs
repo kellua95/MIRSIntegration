@@ -33,9 +33,23 @@ public class UserService : ApplicationService, IUserService
         return MapToUserDetailDto(user, roleDtos);
     }
 
-    public async Task<IEnumerable<UserDetailDto>> GetAllUsersAsync()
+    public async Task<Pagination<UserDetailDto>> GetAllUsersAsync(PaginationParams paginationParams)
     {
-        var users = await _userManager.Users.ToListAsync();
+        var query = _userManager.Users.AsQueryable();
+
+        if (!string.IsNullOrEmpty(paginationParams.Search))
+        {
+            query = query.Where(u => u.Email!.Contains(paginationParams.Search) || 
+                                     u.FullName!.Contains(paginationParams.Search));
+        }
+
+        var count = await query.CountAsync();
+
+        var users = await query
+            .Skip((paginationParams.PageIndex - 1) * paginationParams.PageSize)
+            .Take(paginationParams.PageSize)
+            .ToListAsync();
+
         var userDetails = new List<UserDetailDto>();
 
         foreach (var user in users)
@@ -45,7 +59,11 @@ public class UserService : ApplicationService, IUserService
             userDetails.Add(MapToUserDetailDto(user, roleDtos));
         }
 
-        return userDetails;
+        return new Pagination<UserDetailDto>(
+            paginationParams.PageIndex, 
+            paginationParams.PageSize, 
+            count, 
+            userDetails);
     }
 
     public async Task<UserDetailDto> CreateUserAsync(CreateUserDto createUserDto)
