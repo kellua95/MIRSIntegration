@@ -10,7 +10,7 @@ namespace MIRS.Domain.Models
     public class Municipality : BaseEntity<int>
     {
         public string Name { get; set; }
-        public int GovermentId { get; set; }
+        public int GovernorateId { get; set; }
 
         public Governorate Governorate { get; set; }
     }

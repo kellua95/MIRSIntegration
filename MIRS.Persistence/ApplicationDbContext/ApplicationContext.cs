@@ -2,52 +2,51 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Configuration;
 using MIRS.Domain.Models;
 
-namespace MIRS.Persistence.ApplicationDbContext;
-
-public class ApplicationContext:IdentityDbContext<AppUser,IdentityRole<int>,int>
+namespace MIRS.Persistence.ApplicationDbContext
 {
-    public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
+    public class ApplicationContext
+        : IdentityDbContext<AppUser, IdentityRole<int>, int>
     {
-        
-    }
-    
-    public DbSet<Test> Tests { get; set; }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        base.OnModelCreating(modelBuilder);
-        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-        if (Database.ProviderName == "Microsoft.EntityFrameworkCore.Sqlite")
+        public ApplicationContext(DbContextOptions<ApplicationContext> options)
+            : base(options)
         {
-            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        }
+
+
+        public DbSet<Issue> Issues { get; set; }
+        public DbSet<IssueType> IssueTypes { get; set; }
+        public DbSet<IssueImage> IssueImages { get; set; }
+        public DbSet<IssueComment> IssueComments { get; set; }
+        public DbSet<Governorate> Governorates { get; set; }
+        public DbSet<Municipality> Municipalities { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+ 
+            modelBuilder.ApplyConfigurationsFromAssembly(
+                Assembly.GetExecutingAssembly()
+            );
+
+            if (Database.ProviderName == "Microsoft.EntityFrameworkCore.Sqlite")
             {
-                var properties= entityType.ClrType.GetProperties().Where(p => p.PropertyType == typeof(decimal));
-                foreach (var property in properties)
+                foreach (var entityType in modelBuilder.Model.GetEntityTypes())
                 {
-                    modelBuilder.Entity(entityType.Name).Property(property.Name).HasConversion<double>();
+                    var decimalProperties = entityType.ClrType
+                        .GetProperties()
+                        .Where(p => p.PropertyType == typeof(decimal));
+
+                    foreach (var property in decimalProperties)
+                    {
+                        modelBuilder.Entity(entityType.ClrType)
+                            .Property(property.Name)
+                            .HasConversion<double>();
+                    }
                 }
             }
         }
-    }
-}
-
-public class ApplicationContextFactory
-    : IDesignTimeDbContextFactory<ApplicationContext>
-{
-    public ApplicationContext CreateDbContext(string[] args)
-    {
-        var basePath = Directory.GetCurrentDirectory(); 
-        // This will now be MIRS.Api when using --startup-project
-
-        var dbPath = Path.Combine(basePath, "mirs.db");
-
-        var optionsBuilder = new DbContextOptionsBuilder<ApplicationContext>();
-        optionsBuilder.UseSqlite($"Data Source={dbPath}");
-
-        return new ApplicationContext(optionsBuilder.Options);
     }
 }

@@ -12,7 +12,7 @@ namespace MIRS.Domain.Models
     {
         public string ImagePath { get; set; }
         public int UploadedByUserId { get; set; }
-         public AppUser UploadedByUser { get; set; }
+         public AppUser User { get; set; }
         public ImageTypeEnum ImageType { get; set; }
         public int IssueId { get; set; }
         public Issue Issue { get; set; }
