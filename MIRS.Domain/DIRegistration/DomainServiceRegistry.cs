@@ -1,8 +1,4 @@
 ﻿using MIRS.Core.DI;
-using MIRS.Domain.Interfaces.DomainServices;
-using MIRS.Domain.Interfaces.ISpecifications;
-using MIRS.Domain.Services;
-using MIRS.Domain.Specifications;
 
 namespace MIRS.Domain.DIRegistration;
 
@@ -17,8 +13,7 @@ public static class DomainServiceRegistry
              typeof(Implementation),
              ServiceLifetime))*/
         
-        _services.Add(new ServiceDescriptor(typeof(ITestManager<>), typeof(TestManager<>), ServiceLifetime.Scoped));
-
+        
         return _services.AsReadOnly();
     }
 

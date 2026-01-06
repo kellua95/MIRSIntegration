@@ -1,4 +1,3 @@
-﻿
 using MIRS.Core.DI;
 
 namespace MIRS.Application.DIRegistration;
