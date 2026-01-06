@@ -12,6 +12,8 @@
 
     <ItemGroup>
       <Folder Include="Exceptions\" />
+      <Folder Include="Interfaces\DomainServices\" />
+      <Folder Include="Interfaces\Repositories\" />
       <Folder Include="Services\" />
     </ItemGroup>
 
