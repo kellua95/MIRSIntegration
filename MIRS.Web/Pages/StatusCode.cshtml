@@ -1,0 +1,21 @@
+@page "{code:int}"
+@model MIRS.Web.Pages.StatusCodeModel
+@{
+    ViewData["Title"] = "Error " + Model.StatusCodeValue;
+}
+
+<div class="text-center mt-5">
+    <h1 class="display-4 text-danger">@Model.StatusCodeValue</h1>
+    <h2 class="mb-4">@Model.StatusMessage</h2>
+
+    @if (!string.IsNullOrEmpty(Model.ExceptionMessage))
+    {
+        <div class="alert alert-warning d-inline-block">
+            <strong>Detail:</strong> @Model.ExceptionMessage
+        </div>
+    }
+
+    <div class="mt-4">
+        <a asp-page="/Index" class="btn btn-primary">Go to Home</a>
+    </div>
+</div>
