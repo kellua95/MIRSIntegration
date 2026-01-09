@@ -1,5 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.1.11312.151 d18.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MIRS.Api", "MIRS.Api\MIRS.Api.csproj", "{238ADB10-672E-4EF9-A9A1-A3491A0B1ECD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MIRS.Application", "MIRS.Application\MIRS.Application.csproj", "{1A9ADA39-2211-4138-97CB-6606BF7C1C3B}"
@@ -111,5 +114,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {882CA52D-A17A-444D-9C67-CA04FED659DA}
 	EndGlobalSection
 EndGlobal

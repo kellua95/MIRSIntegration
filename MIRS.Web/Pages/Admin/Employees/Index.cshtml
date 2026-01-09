@@ -1,0 +1,22 @@
+@page
+@model Admin.Employees.IndexModel
+
+<h2>Employees</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Assigned Issues</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var emp in Model.Employees)
+{
+        <tr>
+            <td>@emp.Name</td>
+            <td>@emp.IssueCount</td>
+        </tr>
+}
+    </tbody>
+</table>

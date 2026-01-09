@@ -1,0 +1,35 @@
+@page
+@model Admin.Issues.IndexModel
+
+<h2>All Issues</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Municipality</th>
+            <th>Assigned Employee</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var issue in Model.Issues)
+{
+        <tr>
+            <td>@issue.Id</td>
+            <td>@issue.IssueType</td>
+            <td>@issue.Status</td>
+            <td>@issue.Municipality</td>
+            <td>@(issue.EmployeeName ?? "Not Assigned")</td>
+            <td>
+                <a asp-page="Assign" asp-route-id="@issue.Id"
+                   class="btn btn-sm btn-primary">
+                    Assign
+                </a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

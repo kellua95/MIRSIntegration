@@ -1,0 +1,196 @@
+﻿@page
+@model MIRS.Web.Pages.Reports.IndexModel
+@{
+
+    <!-- Page Header Start -->
+    <div class="report-header"
+         style="background: linear-gradient(rgba(21, 35, 60, 0.6), rgba(21, 35, 60, 0.6)), url('img/carousel-1.jpg') center center/cover no-repeat;">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center text-white">
+                    <h1 class="display-4 mb-4 animated slideInDown">Report a Municipal Problem</h1>
+                    <p class="fs-5 mb-4">Help improve your municipality services by reporting problems you encounter</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Page Header End -->
+    <!-- Report Form Start -->
+    <div class="container">
+        <div class="row">
+            <!-- Form Column -->
+            <div class="col-lg-8">
+                <div class="form-container wow fadeInUp" data-wow-delay="0.1s">
+                    <form id="reportForm">
+                        <!-- Section 1: Problem Details -->
+                        <div class="form-section">
+                            <h3 class="section-title"><i class="fas fa-exclamation-circle"></i> Problem Details</h3>
+
+                            <div class="row">
+                                <div class="col-md-12 mb-4">
+                                    <label for="problemTitle" class="form-label required">Problem Title</label>
+                                    <input type="text" class="form-control" id="problemTitle"
+                                           placeholder="Enter a clear title for the problem" required>
+                                    <small class="text-muted">Example: Pothole in main street, Broken street lights, Waste accumulation</small>
+                                </div>
+
+                                <div class="col-md-12 mb-4">
+                                    <label for="problemDescription" class="form-label required">Problem Description</label>
+                                    <textarea class="form-control" id="problemDescription" rows="5"
+                                          placeholder="Describe the problem in detail, including its size and impact on the community"
+                                          required></textarea>
+                                    <div class="location-hint">
+                                        <i class="fas fa-info-circle"></i> Be precise in your description to help us address the problem quickly
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 2: Municipality Selection -->
+                        <div class="form-section">
+                            <h3 class="section-title"><i class="fas fa-city"></i> Administrative Location</h3>
+
+                            <div class="row">
+                                <div class="col-md-12 mb-4">
+                                    <label for="municipality" class="form-label required">Municipality Responsible for the Problem</label>
+                                    <select class="form-select" id="municipality" required>
+                                        <option value="" selected disabled>Select Municipality</option>
+                                        <option value="amman">Greater Amman Municipality</option>
+                                        <option value="zarqa">Zarqa Municipality</option>
+                                        <option value="irbid">Irbid Municipality</option>
+                                        <option value="aqaba">Aqaba Municipality</option>
+                                        <option value="madaba">Madaba Municipality</option>
+                                        <option value="salt">Al-Salt Municipality</option>
+                                        <option value="karak">Al-Karak Municipality</option>
+                                        <option value="maan">Ma'an Municipality</option>
+                                        <option value="tafila">Al-Tafila Municipality</option>
+                                        <option value="jerash">Jerash Municipality</option>
+                                        <option value="ajloun">Ajloun Municipality</option>
+                                        <option value="mafraq">Al-Mafraq Municipality</option>
+                                        <option value="other">Other Municipality</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-12 mb-4">
+                                    <label for="locationDescription" class="form-label required">Detailed Location Description</label>
+                                    <textarea class="form-control" id="locationDescription" rows="4"
+                                          placeholder="Enter precise location description (Street name, neighborhood, nearest landmark, building number...)"
+                                          required></textarea>
+                                    <div class="location-hint">
+                                        <i class="fas fa-map-marker-alt"></i> More accurate description means faster response
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 3: Upload Images -->
+                        <div class="form-section">
+                            <h3 class="section-title"><i class="fas fa-camera"></i> Attached Images</h3>
+
+                            <div class="mb-4">
+                                <label class="form-label">Upload Problem Images (Optional)</label>
+                                <div class="image-upload-container"
+                                     onclick="document.getElementById('imageUpload').click()">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <h5>Drag & Drop Images Here or Click to Select</h5>
+                                    <p class="text-muted">You can upload up to 5 images (JPG, PNG, GIF - Max 5MB each)</p>
+                                    <div class="upload-btn">Choose Images</div>
+                                </div>
+                                <input type="file" id="imageUpload" multiple accept="image/*" style="display: none;"
+                                       onchange="handleImageUpload(event)">
+                            </div>
+
+                            <!-- Image Preview Area -->
+                            <div class="image-preview" id="imagePreview">
+                                <!-- Images will be added here dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- Section 4: Contact Info (Optional) -->
+                        <div class="form-section">
+                            <h3 class="section-title"><i class="fas fa-user"></i> Contact Information</h3>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <label for="contactName" class="form-label">Name</label>
+                                    <input type="text" class="form-control" id="contactName"
+                                           placeholder="Full Name">
+                                </div>
+
+                                <div class="col-md-6 mb-4">
+                                    <label for="contactPhone" class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" id="contactPhone"
+                                           placeholder="07XXXXXXXX">
+                                </div>
+
+                                <div class="col-md-6 mb-4">
+                                    <label for="contactEmail" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="contactEmail"
+                                           placeholder="example@domain.com">
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-check">
+                                        <label for="check" class="form-check-label">I agree to use my contact info if it helps in solving the issue</label>
+                                        <input type="checkbox" class="form-check-input" id="check">
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-primary submit-btn px-5 py-3">
+                                <i class="fas fa-paper-plane me-2"></i> Submit Report
+                            </button>
+                            <button type="reset" class="btn btn-outline-secondary px-5 py-3 mx-3">
+                                <i class="fas fa-redo me-2"></i> Reset Form
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Info Column -->
+            <div class="col-lg-4">
+                <div class="info-box wow fadeInUp" data-wow-delay="0.2s">
+                    <h4><i class="fas fa-info-circle me-2"></i> Important Information</h4>
+                    <ul>
+                        <li>Reports are processed within 24-48 working hours</li>
+                        <li>Please ensure the accuracy of information provided</li>
+                        <li>Images should be clear and accurately reflect the problem</li>
+                        <li>You can track report status via the follow-up system</li>
+                        <li>For emergencies, please call 065000000</li>
+                    </ul>
+                </div>
+
+                <div class="info-box wow fadeInUp" data-wow-delay="0.3s">
+                    <h4><i class="fas fa-lightbulb me-2"></i> Tips for Effective Reporting</h4>
+                    <ul>
+                        <li>Choose a clear title that expresses the problem</li>
+                        <li>Attach illustrative images from multiple angles</li>
+                        <li>Specify location accurately using nearby landmarks</li>
+                        <li>Describe the problem size and impact on community</li>
+                        <li>Select the correct municipality to speed up processing</li>
+                    </ul>
+                </div>
+
+                <div class="info-box wow fadeInUp" data-wow-delay="0.4s">
+                    <h4><i class="fas fa-history me-2"></i> Report Status</h4>
+                    <div class="progress mb-3">
+                        <div class="progress-bar bg-success" style="width: 85%">85% Resolved</div>
+                    </div>
+                    <div class="progress mb-3">
+                        <div class="progress-bar bg-warning" style="width: 10%">10% In Progress</div>
+                    </div>
+                    <div class="progress mb-3">
+                        <div class="progress-bar bg-danger" style="width: 5%">5% New</div>
+                    </div>
+                    <p class="text-center mb-0"><small>Average processing time: 3 working days</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Report Form End -->
+}

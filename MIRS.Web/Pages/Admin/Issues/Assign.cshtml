@@ -1,0 +1,19 @@
+@page "{id:int}"
+@model Admin.Issues.AssignModel
+
+<h2>Assign Issue #@Model.IssueId</h2>
+
+<form method="post">
+    <input type="hidden" asp-for="IssueId" />
+
+    <div class="form-group">
+        <label>Select Employee</label>
+        <select asp-for="EmployeeId" class="form-control"
+                asp-items="Model.Employees">
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-success mt-2">
+        Assign
+    </button>
+</form>
